@@ -1,0 +1,22 @@
+<h1>shailesh market repay chart</h1>
+
+
+<ag-grid-angular  style="width:1000px;height:250px"
+id="myGrid"
+class="ag-theme-fresh" [gridOptions]="gridOptionsEmpLog" (gridReady)="onGridReadyEmp($event)"
+[enableColResize]="true" [navigateToNextCell]="navigateToNextCell"  (rowClicked)="rowselect();"
+>
+
+</ag-grid-angular>
+<div class="margin-top:10px">
+  
+    <button style="float:left">
+      <span *ngIf="!playPauseButton" (click)="pauseButtonClickEvent();">Pause</span>  
+      <span *ngIf="playPauseButton" [class.disablefwdbk]="!enBlPlayButton"  (click)="playMarketReplayScocket();">Play</span>  
+      </button>
+   
+      <button  style="float:left" [class.disablefwdbk]="!playPauseButton || !upallowd"    (click)="backwardButtonClickEvent();">Prev</button>
+      <button   style="float:left" [class.disablefwdbk]="!playPauseButton ||  !downallowd"   (click)="forwardButtonClickEvent();">Next</button>
+      <button   style="float:left" [class.disablefwdbk]="!playPauseButton" (click)="refreshButtonClickEvent();">Refresh</button>
+   </div>
+     
