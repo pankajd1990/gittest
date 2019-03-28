@@ -1,0 +1,117 @@
+<h1>Welcome market repay chart</h1>
+
+<!-- <p-dialog [visible]="true" [focusOnShow]='true' [transitionOptions]="'0ms'" [closeOnEscape]="true">
+  <p-header>
+      Header content here
+  </p-header>
+  <ag-grid-angular
+  #agGrid
+  style="width:1200px;height:500px"
+  id="myGrid"
+  class="ag-theme-dark"
+  [gridOptions]="gridOptions"
+  [rowData]="rowData"
+  [navigateToNextCell]="navigateToNextCell"
+  (gridReady)="onGridReady($event)"
+></ag-grid-angular>
+<div class="margin-top:10px">
+<button (click)="unwatch();">
+<span *ngIf="is_playing">Pause</span>  
+<span *ngIf="!is_playing"  >Play</span>  
+</button>
+ <br><br>
+<button (click)="watch();">Prev</button>
+<button >Next</button>
+</div>
+
+  <p-footer>
+      //buttons
+  </p-footer>
+</p-dialog>
+ -->
+ <div class="container-fluid">
+ <div class="row">
+   <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-6 nopadding">
+                <ag-grid-angular        
+                id="fgrid"
+                class="ag-theme-dark"
+                [gridOptions]="gridOptions"
+                [rowData]="rowData"
+                [navigateToNextCell]="navigateToNextCell"
+                (gridReady)="onGridReady($event)"
+            ></ag-grid-angular>
+         </div>
+         <div class="col-md-6 nopadding">
+            <ag-grid-angular        
+            id="fgrid"
+            class="ag-theme-dark"
+            [gridOptions]="gridOptions"
+            [rowData]="rowData"
+            [navigateToNextCell]="navigateToNextCell"
+            (gridReady)="onGridReady($event)"
+          ></ag-grid-angular>
+      
+        </div>
+   </div>
+   <div class="row">
+      <div class="col-md-12">
+          <ag-grid-angular        
+          id="fgrid"
+          class="ag-theme-dark"
+          [gridOptions]="gridOptions"
+          [rowData]="rowData"
+          [navigateToNextCell]="navigateToNextCell"
+          (gridReady)="onGridReady($event)"
+        ></ag-grid-angular>
+   </div>
+
+</div>   
+ </div>
+ <div class="col-md-4">      
+      <div class="row">
+        <div class="col-md-12">
+            <ag-grid-angular        
+            id="secgrid"
+            class="ag-theme-dark"
+            [gridOptions]="gridOptions"
+            [rowData]="rowData"
+            [navigateToNextCell]="navigateToNextCell"
+            (gridReady)="onGridReady($event)"
+          ></ag-grid-angular>      
+        </div>
+
+      </div>    
+      <div class="row">
+          <div class="col-md-12">
+              <ag-grid-angular        
+              id="fourgrid"
+              class="ag-theme-dark"
+              [gridOptions]="gridOptions"
+              [rowData]="rowData"
+              [navigateToNextCell]="navigateToNextCell"
+              (gridReady)="onGridReady($event)"
+            ></ag-grid-angular>      
+          </div>
+      </div>
+          
+ </div>
+<div class="col-md-4">
+   
+        <ag-grid-angular        
+        id="thigrid"
+        class="ag-theme-dark"
+        [gridOptions]="gridOptions"
+        [rowData]="rowData"
+        [navigateToNextCell]="navigateToNextCell"
+        (gridReady)="onGridReady($event)"
+      ></ag-grid-angular>
+    
+</div>
+
+
+
+
+ </div>
+ </div>
