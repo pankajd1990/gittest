@@ -1,0 +1,321 @@
+<div class="hundredheight" style="background-color: black !important">
+    <div class="row market-header-row">
+        <div class="col-sm-5 col-md-6 row hundredheight">
+            <span style="padding-left: 12px;">
+                <div pTooltip="Close Market Replay" tooltipPosition="right" style="color: red;" class="market-header-back-btn fa fa-times"
+                    aria-hidden="true" (click)="closeMarketReplay()"></div>
+            </span>
+            <!--<span>
+                <div pTooltip="Show/Hide Control" tooltipPosition="right" class="market-header-back-btn fa fa-th-large" aria-hidden="true"
+                    (click)="showMarketControls()"></div>
+            </span>-->
+            <span>
+                <div pTooltip="Configure Columns" tooltipPosition="right" class="market-header-back-btn fa fa-table" aria-hidden="true" (click)="showConfigureColumnsPanel()"></div>
+            </span>
+            <span>
+                <div pTooltip="Highlight Conditions" tooltipPosition="right" class="market-header-back-btn fa fa-pencil" aria-hidden="true"
+                    (click)="showHighlightPopupWindow()"></div>
+            </span>
+            <span>
+                <input id="input" type="text" pInputText pTooltip="Run Id" tooltipPosition="bottom" style="border-radius: 0px !important;"
+                    class="market-header-runid-field" [ngModel]="runId" readonly>
+            </span>
+            <span>
+                <input id="input" type="text" pInputText pTooltip="Date" tooltipPosition="bottom" style="border-radius: 0px !important;"
+                    class="market-header-date-field" [ngModel]="headerDate" readonly>
+            </span>
+            <span>
+                <input id="input" type="text" pInputText pTooltip="Symbol" tooltipPosition="bottom" style="border-radius: 0px !important;"
+                    class="market-header-symbol-field" [ngModel]="headerSymbol" readonly>
+            </span>
+            <span>
+                <input id="input" type="text" pInputText pTooltip="Series" tooltipPosition="bottom" style="border-radius: 0px !important;"
+                    class="market-header-series-field" [ngModel]="headerSeries" readonly>
+            </span>
+            <span>
+                <input id="input" type="text" pInputText pTooltip="From Time" tooltipPosition="bottom" style="border-radius: 0px !important;"
+                    class="market-header-date-field" [ngModel]="headerFrom" readonly>
+            </span>
+            <span>
+                <input id="input" type="text" pInputText pTooltip="To Time" tooltipPosition="bottom" style="border-radius: 0px !important;"
+                    class="market-header-date-field" [ngModel]="headerTo" readonly>
+            </span>
+            <span *ngIf="headerIndexName">
+			    <input id="input" type="text" pInputText pTooltip="Index" tooltipPosition="bottom" *ngIf="showIndex"
+					style="border-radius: 0px !important;" class="market-header-date-field" [ngModel]="headerIndexName" readonly>
+			</span>
+        </div>
+       
+        <div class="col-sm-7 col-md-6 hundredheight" style="text-align: right">
+            <div pTooltip="Export" tooltipPosition="left"  class="market-header-back-btn excel-icon fa fa-file-excel-o mr-header-button cursor-default"  aria-hidden="true"
+            ></div>
+            <div pTooltip="Large Unexecuted Quantity" tooltipPosition="left" class="market-header-back-btn mr-header-button cursor-default"  aria-hidden="true"
+            >LUQ:<b>{{lcq}}</b></div>
+            <div pTooltip="Large Cancellled Quantity" tooltipPosition="left" class="market-header-back-btn mr-header-button cursor-default"  aria-hidden="true"
+            >LCQ:<b>{{luq}}</b></div>
+            <div pTooltip="Large Unexecuted Buy Orders" tooltipPosition="left" class="market-header-back-btn mr-header-button" [class.cursor-default]="!playPauseButton" aria-hidden="true"
+                (click)="marketReplayPopupGridDataCount('BU', null)">B-U</div>
+            <div pTooltip="Large Unexecuted Sell  Orders" tooltipPosition="left" class="market-header-back-btn mr-header-button" [class.cursor-default]="!playPauseButton" aria-hidden="true"
+                (click)="marketReplayPopupGridDataCount('SU', null)">S-U</div>
+            <div pTooltip="Large Cancelled Buy Orders" tooltipPosition="left" class="market-header-back-btn mr-header-button" [class.cursor-default]="!playPauseButton" aria-hidden="true"
+                (click)="marketReplayPopupGridDataCount('BC', null)">B-C</div>
+            <div pTooltip="Large Cancelled Sell  Orders" tooltipPosition="left" class="market-header-back-btn mr-header-button"  [class.cursor-default]="!playPauseButton" aria-hidden="true"
+                (click)="marketReplayPopupGridDataCount('SC', null)">S-C</div>
+        </div>
+    </div>
+    <div class="row market-header-row">
+        <div class="col-sm-12 market-order-trade-log-tile hundredheight">
+            {{orderTradeLogsData}}
+        </div>
+    </div>
+   
+        <div class="row gridact" style="margin: 0px 1px;">
+            <ag-grid-angular #agGrid [enableColResize]="true" [rowClassRules]="rowClassRules" class="ag-theme-dark options-grid" [gridOptions]="gridOptionsActivityLog"
+                (gridReady)="onGridReadyActivityLog($event)" (rowClicked)="activityGridRowClickEvent($event)" [[rowSelection]="genericComponent.singleRowSelection"
+                [class.original-options-grid]="isMarketControlVisible" [navigateToNextCell]="navigateToNextCell" > </ag-grid-angular>
+        </div>
+        <!--- changing page layout by adding price range grid Pankaj 29032019 -->
+        <div class="row main-buy-sel-grid" style="margin: 0px 1px;">
+              <div class="col-md-4 hundredheight p-0">
+                    <div class="row buy-sell-row" style="margin: 0px 1px;">
+                            <div class="col-md-6 hundredheight p-0">
+                                    <ag-grid-angular class="ag-theme-dark event-grid-style-buy" [gridOptions]="gridOptionsBuyOrderLog" (gridReady)="onGridReadyBuyOrderLog($event)"
+                                    (rowClicked)="marketReplayPopupGridDataCount('BUY', $event)" [enableColResize]="true" [class.original-small-grids]="isMarketControlVisible"></ag-grid-angular>
+                            </div>
+                            <div class="col-md-6 hundredheight p-0">
+                                    <ag-grid-angular class="ag-theme-dark event-grid-style-sell" [gridOptions]="gridOptionsSellOrderLog" (gridReady)="onGridReadySellOrderLog($event)"
+                                    (rowClicked)="marketReplayPopupGridDataCount('SELL', $event)" [enableColResize]="true" [class.original-small-grids]="isMarketControlVisible"></ag-grid-angular>
+                            </div> 
+                    </div> 
+                    <div class="row price-range-row" style="margin: 0px 1px;">
+                        <div class="col-md-12 hundredheight p-0">
+                                <ag-grid-angular class="ag-theme-dark  buy-sell-price-range" [gridOptions]="gridOptionsPriceRange" (gridReady)="onGridReadySellOrderLog($event)"
+                                (rowClicked)="marketReplayPopupGridDataCount('SELL', $event)"  [enableColResize]="true" ></ag-grid-angular>
+                        </div>                              
+                    </div>   
+              </div>
+              <div class="col-md-3 hundredheight p-0">
+                    <div class="row event-grid-row" style="margin: 0px 0px;">
+                            <div class="col-md-12 hundredheight p-0">
+                                 <ag-grid-angular class="ag-theme-dark small-grid" [gridOptions]="gridOptionsEventLog" (gridReady)="onGridReadyEventLog($event)"
+                                 [enableColResize]="true" [class.event-grid]="isMarketControlVisible"></ag-grid-angular>
+                            </div>
+                    </div>
+                    <div class="row ltp-info-grid" style="margin: 0px 1px;">
+                            <div class="col-md-12 hundredheight p-0">
+                                <table class="awayTable">
+                                        <thead class="awayHeader">
+                                            <tr>
+                                                <th class="awayText"> </th>
+                                                <th class="awayNumber">Buy Qty</th>
+                                                <th class="awayNumber">Sell Qty</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="awayBody">
+                                            <tr class="awayBodyRow-1">
+                                                <td class="awayBodyData">Away from LTP ({{awfromltp}} %)</td>
+                                                <td class="awayBodyData-1 buy-row-style" (click)="marketReplayPopupGridDataCount('BUYLTP',null)">{{mdAwayLtpData.mrBuyQtyAwayLP}}</td>
+                                                <td class="awayBodyData-1 sell-row-style" (click)="marketReplayPopupGridDataCount('SELLLTP',null)">{{mdAwayLtpData.mrSellQtyAwayLP}}</td>
+                                            </tr>
+                                            <tr class="awayBodyRow-2">
+                                                <td class="awayBodyData">SL Away from LTP ({{slfromltp}} %)</td>
+                                                <td class="awayBodyData-1 buy-row-style" (click)="marketReplayPopupGridDataCount('BUYLTPSL',null)">{{mdAwayLtpData.mrBuySLQtyAwayLTP}}</td>
+                                                <td class="awayBodyData-1 sell-row-style" (click)="marketReplayPopupGridDataCount('SELLLTPSL',null)">{{mdAwayLtpData.mrSellSLQtyAwayLTP}}</td>
+                                            </tr>
+                                        </tbody>
+                               </table>
+                            </div>
+                      </div>
+             </div>
+             <div class="col-md-5" style="padding: 0px 0px 0px 0px; width: 100%; text-align: center; color: white;" >
+                    <div class="main-market-replay-chart hundredheight" (window:resize)="onResize($event)">
+                            <div id="marketReplay" class="market-replay-chart"></div>
+                    </div>
+            </div>            
+        </div>
+        <!-- end  -->
+        <div class="row margin-top-bottom market-controller-row gotoform" *ngIf="isMarketControlVisible">
+            <div class="col-md-12 row hundredheight">
+                <div class="market-header-btn fa fa-backward" style="padding-left: 3px;"  pTooltip="Backword"  [class.disablefwdbk]="!playPauseButton || !enaUp"   (click)="backwardButtonClickEvent()"></div>
+                <div class="market-header-btn fa fa-play" *ngIf="playPauseButton"  pTooltip="Play"  [class.disablefwdbk]="!enaplay"  (click)="playMarketReplayScocket()"></div>
+                <div class="market-header-btn fa fa-pause" style="padding-left: 4px;"  pTooltip="Pause" *ngIf="!playPauseButton" (click)="pauseButtonClickEvent()"></div>
+                <div class="market-header-btn fa fa-forward"  pTooltip="Forward" [class.disablefwdbk]="!playPauseButton || !enaDown" (click)="forwardButtonClickEvent()"></div>
+                <div class="market-header-btn fa fa-refresh" pTooltip="Refresh" [class.disablefwdbk]="!playPauseButton" (click)="refreshButtonClickEvent(false)"></div>
+                <div>|</div>
+                <div class="market-extra-function-div">Go To:</div>
+                
+                  <form [formGroup]="gotoForm">
+                    <input id="input" class="market-extra-function-field"  autocomplete="off" formControlName="frmtm"   (keyup)="DisabledGoto($event);" maxlength="20"  type="text" pInputText placeholder="hh:mm:ss">
+                    <input id="input" class="market-extra-function-field" autocomplete="off" formControlName="frmorderno" (keyup)="DisabledGoto($event);" maxlength="16" type="text" pInputText placeholder="Order No.">
+                    <input id="input" class="market-extra-function-field" autocomplete="off" formControlName="frmtradeno"  (keyup)="DisabledGoto($event);" maxlength="16"  type="text" pInputText placeholder="Trade No.">
+                    <input id="input" class="market-extra-function-field" autocomplete="off" formControlName="frmbuypanno"  (keyup)="DisabledGoto($event);" maxlength="10" type="text" pInputText  placeholder="Buy PAN">
+                    <input id="input" class="market-extra-function-field" autocomplete="off" formControlName="frmsellerpanno"  (keyup)="DisabledGoto($event);" maxlength="10" type="text" pInputText  placeholder="Sell PAN">
+                    <input id="input" class="market-extra-function-field" autocomplete="off" formControlName="frmbrokereno"  (keyup)="DisabledGoto($event);" maxlength="10" type="text" pInputText placeholder="Broker">
+                    <div class="market-header-btn fa fa-check" style="padding-left: 3px;"  [class.disablefwdbk]="!playPauseButton" pTooltip="Go To" (click)="goToButtonClickEvent()"></div>
+                </form>                                 
+                <div>|</div>               
+                <div class="market-speed-slider">
+                    <p-slider [(ngModel)]="speedSliderVal" [step]="1" [min]="0" [max]="5"></p-slider>
+                </div>
+                <span style="margin-left: 10px;">{{speedSliderVal}}s</span>
+            </div>
+        </div>
+    
+
+    <!-- highlight popup dialog -->
+    <p-dialog header="{{popupHeader}}" [(visible)]="display" [modal]="true" [responsive]="true" [baseZIndex]="10000" (displayChange)="onDialogClose($event)"
+         [height]="replayDialogHeight" [width]="replayDialogWidth" (onShow)="autoSizeAll($event)" (onHide)="resetGrid();" [resizable]="dialogResize">
+        <div class="container-fluid" style="width: 600px; padding-bottom: 0px" [hidden]="!isHighlightPopupVisible">
+            <form [formGroup]="highlightForm">
+                <div class="ui-g">
+                    <div class="ui-g-12 popup-row-group">
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">Broker</label>
+                            <p-chips class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field" formControlName="mkwhgBrokerArray" [max]=3 [addOnTab]=true [addOnBlur]=true
+                                [allowDuplicate]="false" (onAdd)="onAddBrokerValueEvent($event)"></p-chips>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 popup-row-group">
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">Dealer</label>
+                            <p-chips class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field" formControlName="mkwhgDealerArray" [max]=3 [addOnTab]=true [addOnBlur]=true
+                                [allowDuplicate]=false (onAdd)="onAddDealerValueEvent($event)"></p-chips>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 popup-row-group">
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">Acc. No</label>
+                            <p-chips class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field" formControlName="mkwhgAccNoArray" [max]=3 [addOnTab]=true [addOnBlur]=true
+                                [allowDuplicate]=false (onAdd)="onAddAccNoValueEvent($event)"></p-chips>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 popup-row-group">
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">PAN</label>
+                            <p-chips class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field" formControlName="mkwhgPanArray" [max]=3 [addOnTab]=true [addOnBlur]=true
+                                [allowDuplicate]=false (onAdd)="onAddPanValueEvent($event)"></p-chips>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 popup-row-group">
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">NNF Id</label>
+                            <p-chips class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field" formControlName="mkwhgNnfIdArray" [max]=3 [addOnTab]=true [addOnBlur]=true
+                                [allowDuplicate]=false (onAdd)="onAddNnfIdValueEvent($event)"></p-chips>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 popup-row-group">
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">Order No</label>
+                            <p-chips class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field" formControlName="mkwhgOrderNoArray" [max]=3 [addOnTab]=true [addOnBlur]=true
+                                [allowDuplicate]=false (onAdd)="onAddOrderNoValueEvent($event)"></p-chips>
+                        </div>
+                    </div>
+                    <div class="ui-g-12" hidden>
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">Large Unexecuted</label>
+                            <input class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field popup-input" type="text" formControlName="mkwhgLstUnexecQty" pInputText
+                                [ngClass]="{ 'is-invalid': submitted && f.mkwhgLstUnexecQty.errors }">
+                        </div>
+                        <div *ngIf="submitted && f.mkwhgLstUnexecQty.errors" class="popup-text-error">
+                            <div *ngIf="f.mkwhgLstUnexecQty.errors.min">Minimum quantity of large unexecuted is 0</div>
+                            <div *ngIf="f.mkwhgLstUnexecQty.errors.max">Maximum quantity of large unexecuted is 2147483647</div>
+                            <div *ngIf="f.mkwhgLstUnexecQty.errors.pattern">Large Cancelled sholud contain only INTEGER values</div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12" hidden>
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">Large Cancelled</label>
+                            <input class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field popup-input" type="text" formControlName="mkwhgLstCancelledQty" pInputText
+                                [ngClass]="{ 'is-invalid': submitted && f.mkwhgLstCancelledQty.errors }">
+                        </div>
+                        <div *ngIf="submitted && f.mkwhgLstCancelledQty.errors" class="popup-text-error">
+                            <div *ngIf="f.mkwhgLstCancelledQty.errors.min">Minimum quantity of large cancelled is 0</div>
+                            <div *ngIf="f.mkwhgLstCancelledQty.errors.max">Maximum quantity of large cancelled is 2147483647</div>
+                            <div *ngIf="f.mkwhgLstCancelledQty.errors.pattern">Large Cancelled should contain only INTEGER values</div>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12" hidden>
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">% away from LTP</label>
+                            <input class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field popup-input" type="text" formControlName="mkwhgPrcntgAwayLtp" pInputText
+                                [ngClass]="{ 'is-invalid': submitted && f.mkwhgPrcntgAwayLtp.errors }">
+                        </div>
+                        <div *ngIf="submitted && f.mkwhgPrcntgAwayLtp.errors" class="popup-text-error">
+                            <div *ngIf="f.mkwhgPrcntgAwayLtp.errors.min">Minimum % away from LTP is 0</div>
+                            <div *ngIf="f.mkwhgPrcntgAwayLtp.errors.max">Maximum % away from LTP is 100</div>
+                            <div *ngIf="f.mkwhgPrcntgAwayLtp.errors.pattern">% away from LTP should take values upto 2 decimal points</div>
+                        </div>
+                    </div>
+                    <div class="ui-g-12" hidden>
+                        <div class="ui-inputgroup">
+                            <label class="ui-g-3 ui-md-3 ui-lg-3 popup-label">% away from LTP for SL</label>
+                            <input class="ui-g-9 ui-md-9 ui-lg-9 popup-text-field popup-input" type="text" formControlName="mkwhgPrcntgAwayLtpSl" pInputText
+                                [ngClass]="{ 'is-invalid': submitted && f.mkwhgPrcntgAwayLtpSl.errors }">
+                        </div>
+                        <div *ngIf="submitted && f.mkwhgPrcntgAwayLtpSl.errors" class="popup-text-error">
+                            <div *ngIf="f.mkwhgPrcntgAwayLtpSl.errors.min">Minimum % away from LTPSL is 0</div>
+                            <div *ngIf="f.mkwhgPrcntgAwayLtpSl.errors.max">Maximum % away from LTPSL is 100</div>
+                            <div *ngIf="f.mkwhgPrcntgAwayLtpSl.errors.pattern">% away from LTPSL should take values upto 2 decimal points</div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-group mrgn-lft" style="text-align: right; margin-right: 6px;">
+                <p-button class="prime-ng-button mrgn-lft" (click)="submitHighlightForm(highlightForm)" label=" ">
+                    <span ButtonText>Submit</span>
+                </p-button>
+                <p-button class="prime-ng-button mrgn-lft" (click)="closeButtonEvent()" label=" ">
+                    <span ButtonText>Cancel</span>
+                </p-button>
+            </div>
+        </div>
+        <div class="container-fluid" [hidden]="isHighlightPopupVisible" style="padding-bottom: 0px !important;">
+            <ag-grid-angular class="ag-theme-dark" style="width: 100%; height:90% !important;" [gridOptions]="gridOptionsOrderBook"
+                (gridReady)="onGridReadyOrderBook($event)" id="actgrd"  (gridSizeChanged)="onGridSizeChanged($event)" [enableColResize]="true" ></ag-grid-angular>
+            <div style="margin-top:2px;">
+                <ng-container *ngIf="showPagination" class="mrgn-top">
+                    <ng-pagination class="pull-right cursor-pointer" [paginate_data]="paginationData" (paginate)="marketReplayPopupGridData($event)"></ng-pagination>
+                </ng-container>
+            </div>
+        </div>
+    </p-dialog>
+
+    <p-sidebar [(visible)]="isVisibleColumnConfigurator">
+        <div class="configure-column-header" style="background-color: black;">
+            <div style="font-weight:bold; font-size: 13px;color:yellow;width:197px;margin-left: 2%;">SELECT COLUMNS</div>
+            <p-button label=" " class="prime-ng-button" (click)="submitColumnConfiguration()" style="margin-left: 2%;">
+                <span ButtonText>Save</span>
+            </p-button>
+            <p-button label=" " class="prime-ng-button" (click)="isVisibleColumnConfigurator = false" style="margin-left: 2%">
+                <span ButtonText>Close</span>
+            </p-button>
+            <div class="ui-g-12 text-white">
+                <p-checkbox name="selectall" label="Select All"  
+                    inputId="selAll" binary="true" name="selAll" (onChange)="selectAll($event,'ckall');" [(ngModel)]="selAll"  [value]="selAll">
+                </p-checkbox>
+            </div> 
+        </div>
+        <form #orderLogColumnForm="ngForm" style="margin-top: 32%">
+            <div class="ui-g scro-cla">
+                <div class="ui-g-12" *ngFor="let column of activityLogColumns" style="margin-bottom: 0px;">
+                    <p-checkbox name="{{column.headerName}}" label="{{column.headerName}}" [(ngModel)]="selectedActivityLogColumns" value="{{column.field}}"
+                        inputId="{{column.field}}"></p-checkbox>
+                </div>
+            </div>
+        </form>
+    </p-sidebar>
+</div>
+
+<!--Full scereen mode dialog opens when market replay data comes-->
+<p-dialog header="FULL SCREEN MODE"  [(visible)]="fullscreenDis"  [modal]="true"  [responsive]="true"  [minWidth]="300" [baseZIndex]="100"
+     [width]="200" id="pan"  [minHeight]="130" [modal]="false" [draggable]="false" [height]="80"   [blockScroll]="true" [positionTop]="150" [closeOnEscape]="false" [resizable]="false"  [contentStyle]="{'text-align':'center','margin-top':'10px','font-size':'15px','overflow':'hidden'}"  [focusOnShow]="true" [closable]="false"  [maximizable]="false">
+   <span>
+	<b>Full screen mode will be Activated.</b>
+   </span>   
+	<div class="col-md-12 mrgn-top">
+		<p-button label="" class="prime-ng-button" (click)="fullscreenmode();" title="click ok to switch to full screen mode">
+			<span ButtonText>OK</span>
+		</p-button>		
+   </div>
+</p-dialog>
