@@ -1,0 +1,186 @@
+
+<style>
+#chartdiv {
+  width	: 100%;
+  height	: 500px;
+}												
+</style>
+
+<!-- Resources -->
+<script type="text/javascript" src="http://www.amcharts.com/lib/3/amcharts.js"></script>
+<script type="text/javascript" src="http://www.amcharts.com/lib/3/serial.js"></script>
+<script type="text/javascript" src="http://www.amcharts.com/lib/3/themes/none.js"></script>
+<script type="text/javascript" src="http://www.amcharts.com/lib/3/amstock.js"></script>
+<div id="chartdiv"></div>
+
+<!-- Chart code -->
+<script>
+var chartData = generateChartData();
+var chartData = [];
+function generateChartData() {
+//     var chartData = [];
+//     var firstDate = new Date(2019, 0, 1);
+//     firstDate.setDate(firstDate.getDate() - 1000);
+//     firstDate.setHours(0, 0, 0, 0);
+
+//     // 1 hour in milliseconds
+//     for (var i = 0; i < 3600; i++) {
+//         var newDate = new Date(firstDate);
+//         newDate.setHours(0, 0, 0, i);
+
+//         var a = Math.round(Math.random() * (40 + i)) + 100 + i;
+//         var b = Math.round(Math.random() * 100000000);
+        
+//         chartData.push({
+//             date:newDate.toISOString(),
+//             value: a,
+//             volume: b
+//         });
+//     }
+//     console.log(chartData);
+//     return chartData;
+ }
+
+chartData[0]={
+    date:new Date(2019,04,11,23,11,00,100),
+    value:1400,
+    volume:100
+}
+
+chartData[1]={
+    date:new Date(2019,04,11,23,11,01,100),
+    value:1,
+    volume:15
+}
+chartData[2]={
+    date:new Date(2019,04,11,23,11,01,200),
+    value:110,
+    volume:20
+}
+chartData[3]={
+    date:new Date(2019,04,11,23,11,01,300),
+    value:50,
+    volume:50
+}
+chartData[4]={
+    date:new Date(2019,04,11,23,11,02,400),
+    value:2,
+    volume:90
+}
+chartData[4]={
+    date:new Date(2019,04,11,23,11,03,500),
+    value:200,
+    volume:300
+}
+
+
+
+
+var chart = AmCharts.makeChart("chartdiv", {
+
+    type: "stock",
+        "theme": "none",
+    pathToImages: "http://www.amcharts.com/lib/3/images/",
+
+    categoryAxesSettings: {
+        minPeriod: "fff", // set minimum to milliseconds
+        groupToPeriods: ['ss'] // specify period grouping
+    },
+
+    dataSets: [{
+        color: "red",
+        fieldMappings: [{
+            fromField: "value",
+            toField: "value"
+        }, {
+            fromField: "volume",
+            toField: "volume"
+        }],
+
+        dataProvider: chartData,
+        categoryField: "date"
+    }],
+
+
+    panels: [{
+        showCategoryAxis: false,
+        title: "Value",
+        percentHeight: 70,
+        stockGraphs: [{
+            id: "g1",
+            valueField: "value",
+            type: "smoothedLine",
+            lineThickness: 1,
+            bulletSize:1,
+            bullet: "square",
+            bulletColor:"#FFFF00"
+        }],
+
+
+        stockLegend: {
+            valueTextRegular: " ",
+            markerType: "none"
+        }
+    },
+
+    {
+        title: "Volume",
+        percentHeight: 30,
+        stockGraphs: [{
+            valueField: "volume",
+            type: "column",
+            cornerRadiusTop: 2,
+            fillAlphas: 1
+        }],
+
+        stockLegend: {
+            valueTextRegular: " ",
+            markerType: "none"
+        }
+    }],
+
+    chartScrollbarSettings: {
+        graph: "g1",
+        usePeriod: "ss",
+        position: "left"
+    },
+
+    chartCursorSettings: {
+        valueBalloonsEnabled: true,
+        categoryBalloonDateFormats: [{
+            period: "ss",
+            format: "NN:SS"
+        }, {
+            period: "fff",
+            format: "NN:SS:QQQ"
+        }]
+    },
+
+    periodSelector: {
+        position: "left",
+        dateFormat: "NN:SS", // date format with milliseconds
+        inputFieldWidth: 150,
+        periods: [ {
+            period: "mm",
+            count: 1,
+            label: "1 minute"
+        }, {
+            period: "hh",
+            count: 1,
+            label: "1 hour"
+        }, {
+            period: "MAX",
+            label: "MAX"
+        }]
+    },
+
+    panelsSettings: {
+        usePrefixes: true
+    }
+});
+
+
+</script>
+
+<!-- HTML -->
+	

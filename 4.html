@@ -1,0 +1,160 @@
+<html>
+<style>
+    #chartdiv {
+      width: 100%;
+      height: 500px;
+    }
+    
+    </style>
+    
+    <!-- Resources -->
+    <script src="https://www.amcharts.com/lib/4/core.js"></script>
+    <script src="https://www.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://www.amcharts.com/lib/4/themes/animated.js"></script>
+
+    <body>
+            <div id="chartdiv"></div>
+    </body>
+    
+    <!-- Chart code -->
+    <script>
+
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
+    
+    
+    // Create chart
+    var chart = am4core.create("chartdiv", am4charts.XYChart);
+    chart.paddingRight = 20;
+    
+    chart.data = generateChartData();
+    
+    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+    dateAxis.minPeriod="1mm";
+    dateAxis.baseInterval = {
+      "timeUnit": "minute",
+      "count": 20
+    };
+    dateAxis.dateFormatter.dateFormat = "HH:mm:ss";
+
+    dateAxis.tooltipDateFormat = "HH:mm, d MMMM";
+    
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    let value1Axis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.tooltip.disabled = true;
+    valueAxis.title.text = "Unique visitors";
+
+    value1Axis.title.text = "Quantiry";
+
+
+    
+   var series = chart.series.push(new am4charts.LineSeries());
+
+    //var series1 = this.chart.series.push(new am4charts.ColumnSeries());
+    // series1.dataFields.valueY = "quantity";
+    // series1.dataFields.categoryX = "date";
+   
+
+    var series1 = this.chart.series.push(new am4charts.ColumnSeries());
+    series1.dataFields.valueY = "quantity";
+    series1.dataFields.dateX = "date";
+    series1.name = "Sales1";
+    series1.yAxis = value1Axis;
+    value1Axis.renderer.opposite = true;
+    series1.strokeWidth = 3;
+    series1.columns.template.fillOpacity = .8;
+
+    series.dataFields.dateX = "date";
+    series.dataFields.valueY = "visits";
+    series.yAxis = valueAxis;
+    series.tooltipText = "Visits: [bold]{valueY}[/]";
+    series.fillOpacity = 0.3;
+    series.name = "Sales";
+    
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.lineY.opacity = 0;
+    chart.scrollbarX = new am4charts.XYChartScrollbar();
+   chart.scrollbarX.series.push(series);
+    
+    
+    chart.events.on("datavalidated", function () {
+        dateAxis.zoom({start:0.8, end:1});
+    });
+    
+    
+    function generateChartData() {
+        var chartData = [];
+        // current date
+        var firstDate = new Date();
+        // now set 500 minutes back
+        firstDate.setMinutes(firstDate.getDate() - 500);
+    
+        // and generate 500 data items
+        var visits = 500;
+        t=0;
+        // for (var i = 0; i < ; i++) {
+        //     var newDate = new Date(firstDate);
+        //     // each time we add one minute
+        //     newDate.setHours(0, 0, t, i);
+        //     // some random number
+        //     visits += Math.round((Math.random()<0.5?1:-1)*Math.random()*10);
+        //     // add data item to the array
+        //     chartData.push({
+        //         date: newDate,
+        //         visits: visits
+        //     });
+        //     t++;
+        //     if(t==59) {
+        //        t=1;
+        //     }
+        // }
+
+
+chartData[0]={
+    date:new Date(2019,04,11,23,11,00,100),
+    visits:1400,
+    quantity:100
+}
+
+chartData[1]={
+    date:new Date(2019,04,11,23,11,01,100),
+    visits:1,
+    quantity:15
+}
+chartData[2]={
+    date:new Date(2019,04,11,23,11,01,200),
+    visits:110,
+    quantity:20
+}
+chartData[3]={
+    date:new Date(2019,04,11,23,11,01,300),
+    visits:50,
+    quantity:50
+}
+chartData[4]={
+    date:new Date(2019,04,11,23,11,02,400),
+    visits:2,
+    quantity:90
+}
+chartData[4]={
+    date:new Date(2019,04,11,23,11,03,500),
+    visits:200,
+    quantity:300
+}
+
+
+        // chartData.push({
+        //         date: newDate,
+        //         visits: visits
+        //     });
+
+
+
+        return chartData;
+    }
+    </script>
+    
+    <!-- HTML -->
+
+    </html>
