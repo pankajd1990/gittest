@@ -101,7 +101,7 @@ let data={"responseCode":0,"responseMsg":"SUCCESS","resultData":{"file_name":"Or
                 this.insertGraphData();               
             }
             else {                  
-                this.plotGraph();
+                //this.plotGraph();
                 this.enaplay=false;
             }                          
         }
@@ -174,7 +174,7 @@ let data={"responseCode":0,"responseMsg":"SUCCESS","resultData":{"file_name":"Or
       this.mainDataArr=data.resultData;                   
       this.playCounter=0;
       this.insertGraphData();
-      this.plotGraph();
+      //this.plotGraph();
  }
 
 
@@ -189,27 +189,26 @@ let data={"responseCode":0,"responseMsg":"SUCCESS","resultData":{"file_name":"Or
     }
     this.priceDataArr=[];
   }
-  plotGraph() {
+  plotGraph(graphData) {
  
-    console.log(this.priceDataArr);
-   this.priceDataArr.sort(function (a, b) {
+  
+    graphData.sort(function (a, b) {
     return +new Date(a.MRJIFFYTMST) - +new Date(b.MRJIFFYTMST);
   });
   
-  this.graphconfig.priceGraph.panels[0].valueAxes[0].maximum=Math.floor(Math.min.apply(Math, this.priceDataArr)) == 0 ? 1 : Math.floor(Math.min.apply(Math, this.priceDataArr));
-  this.graphconfig.priceGraph.panels[0].valueAxes[0].minimum=Math.ceil(Math.max.apply(Math, this.priceDataArr));
+  this.graphconfig.priceGraph.panels[0].valueAxes[0].maximum=Math.floor(Math.min.apply(Math,graphData)) == 0 ? 1 : Math.floor(Math.min.apply(Math,graphData));
+  this.graphconfig.priceGraph.panels[0].valueAxes[0].minimum=Math.ceil(Math.max.apply(Math,graphData));
     if(!this.priceChart) {        
-        this.graphconfig.priceGraph.dataSets[0].dataProvider=this.priceDataArr;
+        this.graphconfig.priceGraph.dataSets[0].dataProvider=graphData;
         let ele=document.getElementById("chartdiv");
-        this.priceChart=this.AmCharts.makeChart(ele,this.graphconfig.priceGraph);
-        this.priceDataArr=[];    
+        this.priceChart=this.AmCharts.makeChart(ele,this.graphconfig.priceGraph);          
     }
     else {
         this.AmCharts.updateChart(this.priceChart, () => {
-            // Change whatever properties you want            
-            this.priceChart.dataProvider.push(this.priceDataArr);
-            this.priceChart.validateData();
-            this.priceDataArr=[]; 
+            // Change whatever properties you want    
+            this.priceChart.dataSets[0].dataProvider= this.priceChart.dataSets[0].dataProvider.concat(graphData);
+            this.priceChart.ignoreZoom = true;                   
+            this.priceChart.validateData();            
           });
     }      
   }
@@ -233,7 +232,10 @@ let data={"responseCode":0,"responseMsg":"SUCCESS","resultData":{"file_name":"Or
                 this.playCounter++; 
                 var mod  = (this.playCounter+1) % 50;
                 if (mod === 0) {
-                this.plotGraph();
+                    let data1= this.priceDataArr;
+                    this.priceDataArr=[];
+                   this.plotGraph(data1);
+                
                 } 
                 if (this.isPlaying) {    
                     this.insertGraphData();          
@@ -268,7 +270,9 @@ let data={"responseCode":0,"responseMsg":"SUCCESS","resultData":{"file_name":"Or
 
   pauseGraph() {
       this.isPlaying=false;
-      this.plotGraph();
+      let data=this.priceDataArr;
+      this.priceDataArr=[];
+      this.plotGraph(data);
 
   }
   refreshButtonClickEvent() {

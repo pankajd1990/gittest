@@ -332,7 +332,9 @@ public priceGraph={
     autoGridCount :true,
     centerLabels:true,
     fontSize:15,
-    dateFormats:[{"period":"fff","format":"JJ:NN:SS"},{"period":"ss","format":"JJ:NN:SS"},{"period":"mm","format":"JJ:NN"},{"period":"hh","format":"JJ:NN"}],           
+    glueToTheEnd:true,
+    zoomOutOnDataSetChange:true,
+    dateFormats:[{"period":"fff","format":"JJ:NN:SS.QQQ"},{"period":"ss","format":"JJ:NN:SS"},{"period":"mm","format":"JJ:NN"},{"period":"hh","format":"JJ:NN"}],           
     },
     valueAxesSettings :{
         gridThickness:1,    
@@ -351,7 +353,7 @@ public priceGraph={
       color:"#FFFFFF",
       axisColor:"#FFFFFF",    
       axisAlpha:1,    
-      dateFormats:[{"period":"fff","format":"JJ:NN:SS"},{"period":"ss","format":"JJ:NN:SS"},{"period":"mm","format":"JJ:NN"},{"period":"hh","format":"JJ:NN"}],           
+      dateFormats:[{"period":"fff","format":"JJ:NN:SS.QQQ"},{"period":"ss","format":"JJ:NN:SS"},{"period":"mm","format":"JJ:NN"},{"period":"hh","format":"JJ:NN"}],           
       equalSpacing:true,
       gridPosition: "start",
       gridAlpha: 1,
@@ -420,11 +422,10 @@ public priceGraph={
         gapPeriod:5,
         "useDataSetColors": false,       
       } ],
-
-       stockLegend: {
+      stockLegend: {
         valueTextRegular: " ",
-        markerType: "none"
-      }
+        markerType: "square"
+    }
     } ],
     stockLegend: {
 
@@ -433,7 +434,8 @@ public priceGraph={
       graph: "g1",     
       offset:10,
       enable:false,
-      autoGridCount:true
+      autoGridCount:true,
+      position:"top"
     },
     chartScrollbar:{
         offset:200,
@@ -466,12 +468,6 @@ public priceGraph={
         method: function(event) {
           console.log("data updated");
         }
-      } ]
-    
-    
+      } ]        
   } 
-
-
-
 }
-
