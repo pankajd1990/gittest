@@ -1,4 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+  --arrow-before: 0px;
+  --arrow-after :  0px;
+}
+
+
 div.resize {
     border: 2px solid;
     padding: 20px; 
@@ -331,4 +337,28 @@ word-wrap: break-word;
 }
 .stock-chart .event-cell{
   white-space:normal !important;
+}
+
+.arrow:after, .arrow:before {
+	bottom: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.arrow:after {
+	border-color: rgba(136, 183, 213, 0);
+	border-bottom-color: #88b7d5;
+  border-width: 20px;
+  left:var(--arrow-after) 
+  /* margin-left: -10px; */
+}
+.arrow:before {
+	border-color: rgba(194, 225, 245, 0);
+	border-bottom-color: #c2e1f5;
+  border-width: 26px;
+  left:var(--arrow-before)
 }
