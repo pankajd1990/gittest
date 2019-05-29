@@ -1,0 +1,92 @@
+.sidebar {
+	padding-bottom: 10px;
+}
+
+.sidebar a {
+	color: #b8c7ce;
+	text-decoration: none;
+}
+
+.main-sidebar {
+	background-color: #222d32;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding-top: 40px;
+	width: 230px;
+	min-height: 100%;
+	z-index: 810;
+	transition: transform .3s ease-in-out, width .3s ease-in-out
+}
+
+.sidebar-menu,
+.main-sidebar {
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.sidebar-menu {
+	list-style-type: none;
+	padding: 0px;
+	margin-top:4px;
+}
+
+.sidebar-menu>li {
+	position: relative;
+	padding: 0px;
+	margin: 0px;
+}
+
+.sidebar-menu>li.menu-open>a {
+	color: #fff;
+}
+
+.sidebar-menu>li>a {
+	border-left: 3px solid transparent;
+}
+
+.sidebar-menu>li.active>a {
+	border-left-color: #3c8dbc;
+}
+
+.sidebar-menu li>a {
+	position: relative;
+}
+
+.sidebar-menu li>a>.pull-right-container {
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	margin-top: -7px;
+}
+
+.sidebar-menu>li>a {
+	padding: 12px 5px 12px 15px;
+	display: block;
+}
+
+.treeview-menu .treeview-menu {
+	padding-left: 7px;
+}
+
+.treeview-menu {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: none;
+}
+
+.treeview-menu>li>a {
+	padding: 5px 5px 5px 15px;
+	font-size: 14px;
+	display: block;
+}
+
+.sidebar-menu>li>.treeview-menu {
+	margin: 0px;
+	background: #2c3b41;
+}
+.sidebar-menu  > li > a:hover,.sidebar-menu .treeview-menu > li > a:hover {
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.1);
+}

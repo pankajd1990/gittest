@@ -1,0 +1,23 @@
+<aside class="main-sidebar">
+    <section class="sidebar" style="height: auto;">
+        <ul class="sidebar-menu tree" data-widget="tree">
+            <ng-container *ngTemplateOutlet="recursiveMenu; context:{ $implicit: menus.Menu }">
+            </ng-container>
+        </ul>
+    </section>
+</aside>
+<ng-template #recursiveMenu let-menus>
+    <li *ngFor="let menu of menus" class="treeview ">
+        <a href="javascript:void(0)" title="{{menu.label}}" (click)="toggleMenu($event);">
+            <i class="fa fa-dashboard"></i>
+            <span>{{menu.label}}</span>
+            <span class="pull-right-container">
+                <i *ngIf="menu.items" class="fa fa-angle-left pull-right"></i>
+                {{menu.ltems}}
+            </span>
+        </a>
+        <ul class="treeview-menu" *ngIf="menu.items">
+            <ng-container *ngTemplateOutlet="recursiveMenu; context:{ $implicit: menu.items }"></ng-container>
+        </ul>
+    </li>
+</ng-template>
