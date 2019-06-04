@@ -1,0 +1,58 @@
+<header class="main-header">  
+        <a href="#" class="logo">
+            <span class="logo-lg">
+                <b>Surveillance</b>
+            </span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="javascript:void(0)" class="sidebar-toggle" data-toggle="push-menu" role="button" (click)="toggleCollapse();" >
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <ul class="tab-div mt-1">
+                    <ng-container  *ngFor="let item of sharedService.tabArray; let i = index" >
+                          <li class="ml-2" *ngIf="!item.isAvailable" [style.order]="item.order"  [ngClass]="sharedService.currentActiveTab==i ? 'active-tab': ''">
+                              <div>
+                                  <a role="button" href="javascript:void(0)"  (click)="switchTab(item.id);" >
+                                      <span [pTooltip]="item.menuLable" tooltipPosition="bottom">{{item.menuLable}}</span>
+                                  </a>
+                                  <i class="fa fa-times-circle close-icon" *ngIf="item.id!=0"  pTooltip="Close Tab" tooltipPosition="bottom"  (click)="closeTab(item.id);"></i>
+                              </div>
+                              
+                          </li>
+                    </ng-container>
+                   
+            </ul>
+          
+            <div class="navbar-custom-menu">
+                <div class="d-flex justify-content-end">
+                    <form>
+                        <span class="bmd-form-group">
+                            <div class="input-group no-border">
+                                <p-dropdown placeholder="Select" optionLabel="value" [showClear]="true"></p-dropdown>
+                                <input id="input" autocomplete="off" type="text" placeholder="Symbol/Company Name" pInputText>                           
+                            </div>
+                        </span>
+                    </form>
+                    <ul class="user-info">
+                        <li>
+                            <div class="dropdown">
+                                <a href="#" class="dropdown-toggle uname-title" data-toggle="dropdown" aria-expanded="true">
+                                    <span>Test User</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <i class="fa fa-user"></i>
+                                        <a href="#" class="btn btn-default btn-flat">Update Profile</a>
+                                    </li>
+                                    <li>
+                                        <i class="fa fa-sign-out"></i>
+                                        <a href="#" class="btn btn-default btn-flat">Log out</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
