@@ -9,57 +9,73 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
-    .hero {
-    position:relative;
-    background-color:#e15915;
-  
-}
-ul {
-    width:800px;
-  
-}
-ul li {
-    display: inline-block
-}
-div.hero{
-    width:200px;
-    height:50px;
-}
-ul li.act .hero:after {
-    content:'';
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    width: 0;
-    height: 0;
-    border-top: solid 10px #e15915;
-    border-left: solid 10px transparent;
-    border-right: solid 10px transparent;
-}
+   .aa{
+       
+       justify-content:space-between;
+   }   
+   .aa1{
+       
+       flex-direction:column;
+       align-items: flex-end;    
+       flex:1 0 auto;
+   }
+   ul{
+       list-style-type: none;
+       border:1px solid red;
+       padding:0px !important;
+       margin:0px !important;
+   }
+   .data{
 
+       word-wrap: break-word;
+       max-height:100px;
+       height:auto;
+      
+       overflow: auto;
+   }
+   .data span:nth-child(2) {
+    max-height:100px;
+    width:inherit;
+    word-wrap: break-word;
+  
+   }
+  
     </style>
 </head>
 
 <body>
-    <ul>
-    <li class="act">
-            <div class="hero">
-                <a href="#">PANKAJ</a>
-            </div>
-        </li>
-        <li>
-                <div class="hero">
-                    <a href="#">PANKAJ</a>
+   
+       <div class="col-md-6">
+        
+        <ul>
+            
+            <li style="background-color: red;">
+               <div class="d-flex">
+                   <span style="display:flex;flex:1 0;">Name</span>
+                   <span style="display:flex;flex:1 0;">Address</span>
+               </div>
+               <div class="d-flex data">
+                    <span style="display:flex;flex:1 0;">
+                      <ul>
+                          <li>ADHKARI</li>
+                          <li>ADHKARI</li>
+                          <li>ADHKARI</li>
+                          <li>ADHKARI</li>
+                      </ul>
+                    </span>
+                    <span style="display:flex;flex:1 0;">
+                            ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                            fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+                            fffffff
+                    </span>
                 </div>
             </li>
-    </ul>
-  
-    
+           
+              
+        </ul>
+       </div>
 
-
-
+ 
 
 
 
