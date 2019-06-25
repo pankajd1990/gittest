@@ -1,28 +1,2 @@
-import { NgModule,InjectionToken } from '@angular/core';
-import { MyLibComponent } from './my-lib.component';
-import {MyLibService, BASE_URL} from './my-lib.service';
-import { HttpModule } from '@angular/http';
-
-@NgModule({
-  declarations: [MyLibComponent],
-  imports: [
-    HttpModule
-  ],
-  exports: [MyLibComponent],
-  providers:[MyLibService],
-  
-})
-export class MyLibModule {
-  static forRoot(host: {}) {
-    return {
-      ngModule: MyLibModule,
-      providers: [{
-        provide: BASE_URL,
-        useValue: host
-      }]
-    }
-  }
-
- }
-
+https://xd.adobe.com/spec/fe61e4b6-447d-4f38-41bc-bd662f9a03b7-8850/screen/9f2ea641-cd89-42a1-97d2-0459727ada6a/NSE-Dashboard/
 
