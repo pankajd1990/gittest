@@ -1,87 +1,65 @@
-<html>
+import { Component,OnInit, AfterViewInit,AfterContentInit,AfterViewChecked,HostListener} from '@angular/core';
+import { Title }     from '@angular/platform-browser';
+import {GridOptions} from "ag-grid-community";
 
-<head>
-    <title>Bootstrap Example</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  
-    <style>
-   .aa{
-       
-       justify-content:space-between;
-   }   
-   .aa1{
-       
-       flex-direction:column;
-       align-items: flex-end;    
-       flex:1 0 auto;
-   }
-   ul{
-       list-style-type: none;
-       border:1px solid red;
-       padding:0px !important;
-       margin:0px !important;
-   }
-   .data{
 
-       word-wrap: break-word;
-       max-height:100px;
-       height:auto;
-      
-       overflow: auto;
-   }
-   .data span:nth-child(2) {
-    max-height:100px;
-    width:inherit;
-    word-wrap: break-word;
-  
-   }
-  
-    </style>
-</head>
+declare var $ :any;
 
-<body>
-   
-       <div class="col-md-6">
-        
-        <ul>
-            
-            <li style="background-color: red;">
-               <div class="d-flex">
-                   <span style="display:flex;flex:1 0;">Name</span>
-                   <span style="display:flex;flex:1 0;">Address</span>
-                 fe61e4b6-447d-4f38-41bc-bd662f9a03b7-8850/screen/9f2ea641-cd89-42a1-97d2-0459727ada6a/
-               </div>
-               <div class="d-flex data">
-                    <span style="display:flex;flex:1 0;">
-                      <ul>
-                          <li>ADHKARI</li>
-                          <li>ADHKARI</li>
-                          <li>ADHKARI</li>
-                          <li>ADHKARI</li>
-                      </ul>
-                    </span>
-                    <span style="display:flex;flex:1 0;">
-                            ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-                            fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-                            fffffff
-                      comname-Dashboard
-                    </span>
-                </div>
-            </li>
-           
-              
-        </ul>
-       </div>
-
+@Component({
+    selector: "picker-list",
+    templateUrl: `./pickerlist.html`,
  
+  })
+  export class PickerListComponent  {
+   private sourceList1 = [{
+    id:1,
+    type:'sr1'
+   },{
+     id:2,
+     type:'sr1'
+   }];
+   private sourceList2 = [
+    {
+      id:1,
+      type:'sr2'
+     },{
+       id:2,
+       type:'sr2'
+     }
+   ];
+   private pickerList=[];
 
 
+   pickList(obj){
 
-</body>
+    if(obj) {
+      this.pickerList.push(obj);
+    }
 
-</html>
+   }
+   removePickList(obj){
+   let ind= this.pickerList.findIndex((a)=> {
+        return a.id==obj.id
+    });
+    
+    this.pickerList.splice(ind,1);
+   }
+   onFirstDataRendered:()=>{
+    var gridRow = $(".ag-center-cols-container").children().last();
+    var itm     = $(gridRow).children();
+    for(let i=0;i<itm.length;i++) {
+      let innerText:any='';
+      if(i==0) {
+        innerText="Total";
+      }
+      else if(i==1) {
+        innerText=100;
+      }      
+      itm[i].innerHTML=innerText;           
+       gridRow.append(itm[i]);        
+    }              
+     $(".ag-center-cols-conainer").append(gridRow);
+  }
+
+
+  }
