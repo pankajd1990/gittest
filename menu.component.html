@@ -1,0 +1,24 @@
+<aside class="main-sidebar">
+    <section class="sidebar" style="height: auto;">
+        <ul class="sidebar-menu tree" data-widget="tree">
+            <ng-container *ngTemplateOutlet="recursiveMenu; context:{ $implicit: menus.Menu }">
+            </ng-container>
+        </ul>
+    </section>
+</aside>
+<ng-template #recursiveMenu let-menus>
+    <li *ngFor="let menu of menus" class="treeview ">
+        <a href="javascript:void(0)" title="{{menu.label}}" [ngClass]="sharedService.tabArray[sharedService.currentActiveTab] && sharedService.tabArray[sharedService.currentActiveTab].menuId==menu.id ? 'text-white': ''"   (click)="toggleMenu($event,menu.items ? menu.items.length:0,menu.id,menu.label,menu.routerLink);">
+            <i class="fa fa-dashboard"></i>
+            <span>{{menu.label}}</span>
+            <i class="fa fa-hand-o-right ml-2" aria-hidden="true"></i>
+            <span class="pull-right-container">
+                <i *ngIf="menu.items && menu.items.length > 0" class="fa fa-angle-left pull-right"></i>               
+            </span>
+        </a>
+        <ul class="treeview-menu" *ngIf="menu.items && menu.items.length > 0">
+            <ng-container *ngTemplateOutlet="recursiveMenu; context:{ $implicit: menu.items }"></ng-container>
+        </ul>
+    </li>
+</ng-template>
+
