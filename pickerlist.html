@@ -32,7 +32,7 @@ import * as am4charts from "@amcharts/amcharts4/charts";
          name:"Sukhada" 
         },{
           id:2,
-          name:"Rand Shweta Kasar" 
+          
         }]
        
         chart.data = [
@@ -115,7 +115,13 @@ series.labels.template.adapter.add("tooltipHTML", function(text, target, key) {
 
 
 
- 
+   let gradient = new am4core.LinearGradient();
+  gradient.rotation=90;
+gradient.addColor(am4core.color("#f66704"),500,0.50);
+gradient.addColor(am4core.color("white"),500,1);
+  series.fill = gradient;
+  series.fillOpacity = 0.5;
+  
 
 
     }
