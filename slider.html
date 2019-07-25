@@ -1,0 +1,54 @@
+<aside class="main-sidebar">
+  <section class="sidebar" style="height: auto;">
+      <ul class="sidebar-menu tree" data-widget="tree">
+          <ng-container *ngTemplateOutlet="recursiveMenu; context:{$implicit:{ menus: menus.Menu,submenu:'no' }}">
+          </ng-container>
+      </ul>
+  </section>
+</aside>
+<ng-template #recursiveMenu let-Json1 >
+  <li *ngFor="let menu of Json1.menus" class="treeview ">
+      <a href="javascript:void(0)" title="{{menu.label}}" (click)="toggleMenu($event);">
+         
+            <i  *ngIf="Json1.submenu=='yes'" class="fa fa-dashboard icon"></i>
+            <span  class="mname">
+                  <span>{{menu.label}}</span>
+                    <i *ngIf="menu.items" class="ml-2 fa fa-angle-left"></i>
+            </span>
+          
+           <div class="menu text-center" *ngIf="Json1.submenu=='no'">
+                <i class="fa fa-dashboard"></i>
+               <p style="white-space: nowrap; overflow: hidden;text-overflow: ellipsis;"  *ngFor="let menu_split of menu.menuSpilt">{{menu_split}}</p>
+               
+           </div>         
+      </a>
+     
+            <ul class="treeview-menu" *ngIf="menu.items">
+                    <ng-container *ngTemplateOutlet="recursiveMenu;   context:{ $implicit:{ menus: menu.items,submenu:'yes' }}"></ng-container>
+            </ul>
+     
+  </li>
+</ng-template>
+
+
+
+
+<!-- <aside class="main-sidebar">
+  <section class="sidebar" style="height: auto;">
+     <ul class="sidebar-menu tree">
+         <li  class="treeview ">a</li>
+         <li  class="treeview ">b
+
+                <div class="menu text-center" *ngIf="Json1.submenu=='no'">
+                        <i class="fa fa-dashboard"></i>
+                       <p>Pankaj durve</p>
+                       <p>Durve pankaj</p>
+                   </div>    
+         </li>
+     </ul>
+  </section>
+</aside> -->
+
+
+
+
