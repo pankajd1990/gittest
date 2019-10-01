@@ -1,0 +1,74 @@
+<!-- <section  class="content"> -->
+	<div style="overflow: auto">
+	<div class="report-title ml-2">
+		<b>{{ reportDes}}</b>     
+	</div>
+	<div innerLoader loadingText="Loading Report Details." *ngIf="isReportDataLoading" styleObj='{ "marginTop":"50%" }'></div>
+	<form  [formGroup]="reportActionForm"  #rptForm class="w-100 report">
+		<div class="row mt-2 m-0">
+			<ng-container *ngFor="let item of reportViewParams; let i = index">
+				<div class="mt-1" [ngClass]="{'col-md-12':item.seq==0,'col-md-6':item.seq!=0}" [ngSwitch]="item.prmParamType">
+				<div class="ui-fluid">
+					<label class="frm-lbl"       *ngIf="item.prmParamType!='Button' && item.prmParamType!='Footnote' && item.prmVisibleFlag=='Y' ">{{item.prmParamName}}:</label>
+					<ng-container *ngSwitchCase="'Text'">
+						<input  type="text"  [ngClass]="item.prmVisibleFlag=='N' ? 'd-none': ''"   class="small-field" pInputText [formControlName]="'formControlName' + item.prmParamId"  (change)="conrtolComponentChangeEvent($event, 'formControlName' + item.prmParamId, item,i)"/>
+					</ng-container>
+					<ng-container *ngSwitchCase="'Auto'">
+						<p-autoComplete appendTo="body" [ngClass]="item.prmVisibleFlag=='N' ? 'd-none': ''"  [formControlName]="'formControlName' + item.prmParamId" (completeMethod)="autoCompleteMethodEvent(item, $event,i,'formControlName' + item.prmParamId)"
+						field="value" (onClear)="conrtolComponentChangeEvent($event, 'formControlName' + item.prmParamId, item,i)"
+						(onSelect)="conrtolComponentChangeEvent($event, 'formControlName' + item.prmParamId, item)" [suggestions]="autoCompleteSuggestions['autoCompleteSuggestions'+i]"
+						[size]="10" [minLength]="1" [placeholder]="'Select ' + item.prmParamName">
+						</p-autoComplete>
+					</ng-container>
+					<ng-container *ngSwitchCase="'MultiAuto'">
+						<p-autoComplete appendTo="body"  [ngClass]="item.prmVisibleFlag=='N' ? 'd-none': ''"  
+						[formControlName]="'formControlName' + item.prmParamId" (completeMethod)="autoCompleteMethodEvent(item,$event,i,'formControlName' + item.prmParamId)"
+						field="value" (onSelect)="conrtolComponentChangeEvent($event, 'formControlName' + item.prmParamId,  item,i)"
+						[multiple]="true" (onUnselect)="conrtolComponentChangeEvent($event, 'formControlName' + item.prmParamId,  item,i)"
+						 [suggestions]="autoCompleteSuggestions['autoCompleteSuggestions'+i]" [size]="10" [minLength]="1"
+						[placeholder]="'Select ' +  item.prmParamName"  (onClick)="onShow('formControlName' + item.prmParamId);"></p-autoComplete>
+					</ng-container>
+					<ng-container *ngSwitchCase="'Date'" >
+						<!-- <my-date-picker  [ngClass]="item.prmVisibleFlag=='N' ? 'd-none': ''"   name="mydate" [options]="addReportDateConfig" [formControlName]="'formControlName' + item.prmParamId" (dateChanged)="conrtolComponentChangeEvent($event, 'formControlName' + item.prmParamId, item,i)"></my-date-picker> -->
+						
+						<div class="input-group">
+								<input pInputText [ngClass]="item.prmVisibleFlag=='N' ? 'd-none': ''" placeholder="Select a date" ngx-mydatepicker name="myDate"
+						         (dateChanged)="conrtolComponentChangeEvent($event, 'formControlName' + item.prmParamId, item,i)" 	  [formControlName]="'formControlName' + item.prmParamId" [options]="addReportDateConfig" #dp="ngx-mydatepicker"/>						
+								<span class="input-group-btn" style="position: absolute;;right: 0px;line-height: 23px">										
+										<i class="fa fa-times" style="font-size: 15px" (click)="dp.clearDate()"></i>																		
+										<i class="fa fa-calendar mr-1" style="font-size: 15px"   (click)="dp.toggleCalendar()"></i>									
+								</span>
+						</div>
+					</ng-container>
+					<ng-container *ngSwitchCase="'List'">
+						<p-dropdown appendTo="body"     [ngClass]="item.prmVisibleFlag=='N' ? 'd-none': ''"  [options]="item.dynamicLovData" showClear="true" (onChange)="conrtolComponentChangeEvent($event, 'formControlName' + item.prmParamId, item,i)"
+						[formControlName]="'formControlName' + item.prmParamId" optionLabel="value" [placeholder]="'Select ' + item.prmParamName" ></p-dropdown>
+					</ng-container>
+					<ng-container *ngSwitchCase="'MultiList'">
+						<p-multiSelect appendTo="body"   [ngClass]="item.prmVisibleFlag=='N' ? 'd-none': ''"  [options]="item.dynamicLovData" (onChange)="conrtolComponentChangeEvent($event, 'formControlName' + item.prmParamId, item,i)"
+						[formControlName]="'formControlName' + item.prmParamId" [styleClass]="cssClass[i]['cls']"  optionLabel="value"  (onClick)="onShow('formControlName' + item.prmParamId);">                                               
+						</p-multiSelect>
+					</ng-container>
+					<ng-container *ngSwitchCase="'Time'">
+						<time-input [ngClass]="item.prmVisibleFlag=='N' ? 'd-none': ''"  [formControlName]="'formControlName' + item.prmParamId"></time-input>
+					</ng-container>
+					<ng-container *ngSwitchCase="'Button'"  >
+						<button [ngClass]="item.prmVisibleFlag=='N' ? 'd-none': ''"   *ngIf="reportType!='AutoAlert'" pButton type="button" [hidden]="item.prmVisibleFlag=='N'" [label]="item.prmParamName" (click)="formButtonClickEvent(item)"></button>
+					</ng-container>
+					<ng-container *ngSwitchCase="'File'">							
+							<p-fileUpload  [showCancelButton]=false [previewWidth]="0"  customUpload="true" [showUploadButton]=false name="myfile[]" (onSelect)="fileUpload($event);"></p-fileUpload>
+					</ng-container>
+				</div>
+		</div>
+		</ng-container>
+		</div>
+	</form>	
+	<div class="mt-2 ml-3" *ngIf="isEnableSubReset">
+		<button pButton type="button" icon="pi pi-check" iconPos="left"  [label]="Sumnbit"   (click)="submitButtonClickEvent()" *ngIf="!isReportDataLoading"></button>
+		<button pButton type="button"  label="Reset" *ngIf="reportViewParams.length > 0" (click)="resetButtonClickEvent()" style="margin-left: 10px"></button>
+	</div>
+	<div class="footnote"    *ngIf="showFootNote=='Y' && reportType!='AutoAlert'">
+		Note: {{footnoteText}}
+	</div>
+	</div>	
+<!-- </section> -->
