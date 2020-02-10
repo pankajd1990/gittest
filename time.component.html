@@ -1,17 +1,155 @@
-<span style="width:12%;float: left;">
-     <div class="ui-fluid">
-        <input type="text" pInputText  [value]="hh" (keyup)="switch($event);" id="hh" />  
-     </div>
+<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script src="https://www.amcharts.com/lib/3/serial.js"></script>
+<script src="https://www.amcharts.com/lib/3/amstock.js"></script>
+<script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.23/moment-timezone-with-data-2012-2022.min.js"></script>
+<div id="chartdiv"></div>										
+<style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
 
-</span>
-<span style="width:12%;float: left;">
-    <div class="ui-fluid">
-        <input type="text" pInputText id="mm"  [value]="mm" (keyup)="switch($event);" />  
-     </div>
+#chartdiv {
+  width: 100%;
+  height: 300px;
+}
 
-</span>
-<span style="width:12%;float: left;">
-    <div class="ui-fluid">
-        <input type="text" pInputText id="ss"  [value]="ss" (keyup)="switch($event);"/>  
-     </div>
-</span>
+</style>
+<div id="chartdiv"></div>
+<script>
+/**
+ * function that generates random data for preset period/granularity
+ * @days days to generate data for
+ * #granularity in minutes
+ */
+ function generateData(days, granularity) {
+  // init return array
+  var data = [];
+
+  // add a first empty data point 2 years back
+  // var firstDate = new Date();
+  // firstDate.setFullYear(firstDate.getFullYear() - 2);
+  // firstDate.setHours(0, 0, 0, 0);
+  // data.push({
+  //   date: firstDate
+  // });
+
+  // add data points
+  var now = new Date();
+  var date = new Date();
+  date.setDate(date.getDate() - days);
+  date.setHours(0, 0, 0, 0);
+  while (date.getTime() <= now.getTime()) {
+    date.setTime(date.getTime() + (granularity * 60000));
+    var curDate = new Date(date);
+    data.push({
+      date: curDate,
+      value: (Math.round(Math.random() * 40) + 100)
+    });
+  }
+  console.log(data);
+  return data;
+}
+
+/**
+ * Create the chart
+ */
+
+var chart = AmCharts.makeChart("chartdiv", {
+  type: "stock",
+  dataSets: [{
+    title: "2 days | granularity: 1 min.",
+    color: "#F60",
+    fieldMappings: [{
+      fromField: "value",
+      toField: "value"
+    }],
+    dataProvider: generateData(2, 1),
+    categoryField: "date"
+  }],
+
+  panels: [{
+    stockGraphs: [{
+      id: "g1",
+      valueField: "value",
+      comparable: true,
+      compareField: "value",
+      balloonText: "[[title]]:<b>[[value]]</b>"
+    }],
+
+    stockLegend: {
+      periodValueTextRegular: "[[value.close]]"
+    }
+  }],
+
+  chartScrollbarSettings: {
+    graph: "g1"
+  },
+  
+  categoryAxesSettings: {
+    minPeriod: "mm",
+    maxSeries: 500
+  },
+
+  chartCursorSettings: {
+    valueBalloonsEnabled: true,
+    fullWidth: true,
+    cursorAlpha: 0.1,
+    valueLineBalloonEnabled: true,
+    valueLineEnabled: true,
+    valueLineAlpha: 0.5
+  },
+  
+  periodSelector: {
+    // periods: [ {
+    //   period: "DD",
+    //   selected: true,
+    //   count: 1,
+    
+    // },  ]
+  },
+
+});
+
+/**
+ * Add event handlers to catch zoom events
+ * We're adding zoomed events after the chart is rendered
+ */
+chart.addListener("rendered", function() {
+  chart.ignoreZoom = true;
+  chart.addListener("zoomed", function(event) {
+    
+    // ignore this zoom?
+    if (chart.ignoreZoom) {
+      chart.ignoreZoom = false;
+      return;
+    }
+    
+    // check the first date
+    var now = new Date();
+    var days = (now.getTime() - event.startDate.getTime()) / 86400000;
+    
+    // figure out which data set to use
+    var dataSet;
+    if ( days <= 2 )
+      dataSet = chart.dataSets[0];
+    else if ( days <= 10 )
+      dataSet = chart.dataSets[1];
+    else
+      dataSet = chart.dataSets[2];
+    
+    // check if this data set is already set
+    if ( chart.mainDataSet === dataSet )
+      return;
+    
+    // change the data set
+    chart.mainDataSet = dataSet;
+    chart.ignoreZoom = true;
+    chart.validateNow(false, true);
+  });
+});
+
+
+</script>
